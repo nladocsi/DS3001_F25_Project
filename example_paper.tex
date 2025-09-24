@@ -60,8 +60,8 @@
 \begin{document}
 
 \twocolumn[
-\icmltitle{Submission and Formatting Instructions for \\
-           International Conference on Machine Learning (ICML 2025)}
+\icmltitle{Modeling Diabetes Risk Using  \\
+         Lifestyle and Demographic Predictors}
 
 % It is OKAY to include author information, even for blind
 % submissions: the style file will automatically remove it for you
@@ -81,19 +81,15 @@
 \begin{icmlauthorlist}
 \icmlauthor{Natalie Ladocsi}{equal,yyy}
 \icmlauthor{Molly O'Leary}{equal,yyy,comp}
-\icmlauthor{Maya Papadopulos}{comp}
+\icmlauthor{Maya Papadopulos}{equal, comp}
 
 %\icmlauthor{}{sch}
-\icmlauthor{Firstname8 Lastname8}{sch}
-\icmlauthor{Firstname8 Lastname8}{yyy,comp}
 %\icmlauthor{}{sch}
 %\icmlauthor{}{sch}
 \end{icmlauthorlist}
 
 \icmlaffiliation{yyy}{Department of XXX, University of YYY, Location, Country}
 \icmlaffiliation{comp}{Company Name, Location, Country}
-\icmlaffiliation{sch}{School of ZZZ, Institute of WWW, Location, Country}
-
 \icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
 \icmlcorrespondingauthor{Firstname2 Lastname2}{first2.last2@www.uk}
 
@@ -125,15 +121,15 @@ TEXT HERE
 
 The purpose of this project is to estimate the likelihood that an adult develops diabetes in the United States based on their basic demographic characteristics, as well as behavioral characteristics. The data used in this project is the 2024 National Health Interview Survey (NHIS). This survey is conducted annually of US households and is used to monitor national health trends as well as inform public health policy. This survey collects data on a broad range of health-related information and uses a large representative sample of the U.S. population. Using survey data does come with limitations. The National Health Interview Survey, since 1957, has conducted confidential face-to-face interviews throughout the year. Dividing the country into different geographic regions ensures a broad geographic coverage, and randomization also aids in procuring data from a representative sample. 
 
+The first step with any large data set is to minimize the variables, dropping those not needed. With diabetes being the target variable for this project the first step was to identify which variables are needed for analysis. Focusing on three categories of diabetes, gestational, prediabetes, lastly type I and II. In the original dataset these three variables are separate [GESDIB\_A, PREDIB\_A, DIBEV\_A], for our new dataset these variables will be combined into one, with observations 1 = yes, 2 = no, 7 = refused, 8 = not ascertained, 9  = don’t know. Collection and analysis will also occur for diabetes type, DIBTYPE\_A, as well as surveyors' age that they were first diagnosed with diabetes, DIBAGETC\_A. 
 
+The predictors for diabetes are the following variables, first there is a broad category regarding food insecurity [FDSRUNOUT\_A worry food would run out, FDSLAST\_A food didn't last,  FDSHUNGRY\_ A Ever hungry because not enough money for food]. Through analysis this data may impact which of the variables should be prioritized. Further demographic characteristics will be analyzed like sex (SEX\_A), home location (REGION), race/ethnicity (RACEALLP\_A), income level (RATCAT\_A), education level of sample adults (EDUCP\_A). Lastly, physical lifestyle habits will also be factored through physical activity (MONDNR\_A), and weekly walking (WLKEISDAY\_A). 
 
 
 
 \subsection{Submitting Papers}
 
-\textbf{Anonymous Submission:} ICML uses double-blind review: no identifying
-author information may appear on the title page or in the paper
-itself. \cref{author info} gives further details.
+
 
 \medskip
 
