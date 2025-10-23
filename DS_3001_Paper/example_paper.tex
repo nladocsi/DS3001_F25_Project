@@ -137,7 +137,7 @@ As outlined in our Data Description, the goal of this project is to develop a mo
 
 After cleaning, organizing, and wrangling the data, we plan to use a decision tree. Due to the complexity of our data and the multitude of factors influencing the diabetic outcome of the patient, we felt this was the most appropriate model to use. A decision tree will be more compatible with the lack of quantitative or numeric data in our dataset. Trees are also non-reliant on linear relationships, which we are not likely to see in our data. The tree itself will also provide a useful visualization of the decision-making pathway. However, since decision trees output a categorical variable, we will have to encode or determine some threshold with diabetes being yes or no.
 
-
+In order to accomplish this, we first have to encode categorical variables using one-hot encoding or pd.get_dummies(). The data will be split 80/20 into train and test sets, respectively, to then train the model. From there, the accuracy, R2, and RMSE values will be calculated to evaluate the model and determine what needs to be changed. One of the biggest concerns with the decision tree model is overfitting, which can occur if the model is split too many times. Especially with complex data, we will have to ensure this is not the case and adjust accordingly.
 
 
 \subsection{Submitting Final Camera-Ready Copy}
