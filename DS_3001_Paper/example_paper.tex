@@ -127,49 +127,15 @@ The outlined variables above gather information about the surveyor's diagnosis o
 
 The data used were obtained from a survey; therefore, not all surveyors answered every question. In addition, those surveyed may not have been entirely truthful or provided accurate information. This leaves us with NA values that will need to be wrangled before we begin data analysis. Therefore, conclusions can be drawn but cannot be claimed with absolute certainty. This data set has hundreds of variables, so we will remove many variables that we believe to be insignificant. We need to do testing to ensure that we remove the correct ones. 
 
-\subsection{Submitting Papers}
+\subsection{Pre-Analysis Plan}
 
 
 
 \medskip
 
-Authors must provide their manuscripts in \textbf{PDF} format.
-Furthermore, please make sure that files contain only embedded Type-1 fonts
-(e.g.,~using the program \texttt{pdffonts} in linux or using
-File/DocumentProperties/Fonts in Acrobat). Other fonts (like Type-3)
-might come from graphics files imported into the document.
+As outlined in our Data Description, the goal of this project is to develop a model that is able to predict the likelihood of a person developing diabetes in the United States, based on demographic and behavioral information. The dataset includes information on numerous aspects of the surveyors, including whether they have diabetes. Through training the model and establishing patterns of correlation, the goal is to create a model that can estimate whether or not one is likely to develop diabetes depending on the information entered. The demographic variables being explored include food insecurity, sex, region, race/ethnicity, income level, and education level. In regard to a patient's lifestyle, the variables included in the data examine physical activity and weekly walking habits.
 
-Authors using \textbf{Word} must convert their document to PDF\@. Most
-of the latest versions of Word have the facility to do this
-automatically. Submissions will not be accepted in Word format or any
-format other than PDF\@. Really. We're not joking. Don't send Word.
 
-Those who use \textbf{\LaTeX} should avoid including Type-3 fonts.
-Those using \texttt{latex} and \texttt{dvips} may need the following
-two commands:
-
-{\footnotesize
-\begin{verbatim}
-dvips -Ppdf -tletter -G0 -o paper.ps paper.dvi
-ps2pdf paper.ps
-\end{verbatim}}
-It is a zero following the ``-G'', which tells dvips to use
-the config.pdf file. Newer \TeX\ distributions don't always need this
-option.
-
-Using \texttt{pdflatex} rather than \texttt{latex}, often gives better
-results. This program avoids the Type-3 font problem, and supports more
-advanced features in the \texttt{microtype} package.
-
-\textbf{Graphics files} should be a reasonable size, and included from
-an appropriate format. Use vector formats (.eps/.pdf) for plots,
-lossless bitmap formats (.png) for raster graphics with sharp lines, and
-jpeg for photo-like images.
-
-The style file uses the \texttt{hyperref} package to make clickable
-links in documents. If this causes problems for you, add
-\texttt{nohyperref} as one of the options to the \texttt{icml2025}
-usepackage statement.
 
 
 \subsection{Submitting Final Camera-Ready Copy}
