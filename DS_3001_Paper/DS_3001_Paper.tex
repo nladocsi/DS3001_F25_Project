@@ -81,7 +81,7 @@
 \begin{icmlauthorlist}
 \icmlauthor{Natalie Ladocsi}{equal,yyy}
 \icmlauthor{Molly O'Leary}{equal,yyy,comp}
-\icmlauthor{Maya Papadopulos}{equal, comp}
+\icmlauthor{Maya Papadopoulos}{equal, comp}
 
 %\icmlauthor{}{sch}
 %\icmlauthor{}{sch}
@@ -139,7 +139,7 @@ After cleaning, organizing, and wrangling the data, we will begin with explorato
 
 Once the variables of our analysis have been explored, we plan to use a decision tree model for further analysis. Due to the complexity of our data and the multitude of factors influencing the diabetic outcome of the patient, we felt this was the most appropriate model to use. A decision tree will be compatible with the lack of quantitative or numeric data in our dataset. Trees are also non-reliant on linear relationships which we are not likely to see in our data. The tree itself will provide an easily interpretable visualization of the decision-making pathway. However, since decision trees output a categorical variable, we will have to encode or determine some threshold with diabetes being a yes or no.
 
-In order to accomplish this, we first have to encode the categorical variables using one-hot encoding or pd.get\_dummies(). The tree model cannot handle text labels directly so converting these labels into a numeric form allows the model to run successfully. Next, it is integral to split the data into train and test sets to give the model the ability to generalize. Allowing performance not just on the given data, but predicting for unseen, future data. We will split the data 80/20 into train and test sets, respectively, training the model. After visualization, we will choose to check the accuracy of the model using the confusion matrix method, which depicts how predictions made by the model match the observed outcomes. From there R\textsuperscript{2} and RMSE values will be calculated to evaluate the model and determine if changes need to be implemented. One of the biggest concerns with the decision tree model is overfitting which can occur if the model is split too many times. Especially with complex data, we will most likely have to prune the tree to generalize the model. 
+In order to accomplish this, we first have to encode the categorical variables using one-hot encoding or `pd.get\_dummies()`. The tree model cannot handle text labels directly so converting these labels into a numeric form allows the model to run successfully. Next, it is integral to split the data into train and test sets to give the model the ability to generalize. Allowing performance not just on the given data, but predicting for unseen, future data. We will split the data 80/20 into train and test sets, respectively, training the model. After visualization, we will choose to check the accuracy of the model using the confusion matrix method, which depicts how predictions made by the model match the observed outcomes. From there R\textsuperscript{2} and RMSE values will be calculated to evaluate the model and determine if changes need to be implemented. One of the biggest concerns with the decision tree model is overfitting which can occur if the model is split too many times. Especially with complex data, we will most likely have to prune the tree to generalize the model. 
 
 
 \section{Model}
