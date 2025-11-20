@@ -142,50 +142,11 @@ Once the variables of our analysis have been explored, we plan to use a decision
 In order to accomplish this, we first have to encode the categorical variables using one-hot encoding or pd.get\_dummies(). The tree model cannot handle text labels directly so converting these labels into a numeric form allows the model to run successfully. Next, it is integral to split the data into train and test sets to give the model the ability to generalize. Allowing performance not just on the given data, but predicting for unseen, future data. We will split the data 80/20 into train and test sets, respectively, training the model. After visualization, we will choose to check the accuracy of the model using the confusion matrix method, which depicts how predictions made by the model match the observed outcomes. From there R\textsuperscript{2} and RMSE values will be calculated to evaluate the model and determine if changes need to be implemented. One of the biggest concerns with the decision tree model is overfitting which can occur if the model is split too many times. Especially with complex data, we will most likely have to prune the tree to generalize the model. 
 
 
-\subsection{Submitting Final Camera-Ready Copy}
-
-The final versions of papers accepted for publication should follow the
-same format and naming convention as initial submissions, except that
-author information (names and affiliations) should be given. See
-\cref{final author} for formatting instructions.
-
-The footnote, ``Preliminary work. Under review by the International
-Conference on Machine Learning (ICML). Do not distribute.'' must be
-modified to ``\textit{Proceedings of the
-$\mathit{42}^{nd}$ International Conference on Machine Learning},
-Vancouver, Canada, PMLR 267, 2025.
-Copyright 2025 by the author(s).''
-
-For those using the \textbf{\LaTeX} style file, this change (and others) is
-handled automatically by simply changing
-$\mathtt{\backslash usepackage\{icml2025\}}$ to
-$$\mathtt{\backslash usepackage[accepted]\{icml2025\}}$$
-Authors using \textbf{Word} must edit the
-footnote on the first page of the document themselves.
-
-Camera-ready copies should have the title of the paper as running head
-on each page except the first one. The running title consists of a
-single line centered above a horizontal rule which is $1$~point thick.
-The running head should be centered, bold and in $9$~point type. The
-rule should be $10$~points above the main text. For those using the
-\textbf{\LaTeX} style file, the original title is automatically set as running
-head using the \texttt{fancyhdr} package which is included in the ICML
-2025 style file package. In case that the original title exceeds the
-size restrictions, a shorter form can be supplied by using
-
-\verb|\icmltitlerunning{...}|
-
-just before $\mathtt{\backslash begin\{document\}}$.
-Authors using \textbf{Word} must edit the header of the document themselves.
-
-\section{Format of the Paper}
+\section{Model}
 
 All submissions must follow the specified format.
 
-\subsection{Dimensions}
-
-
-
+\subsection{Building the Model}
 
 The text of the paper should be formatted in two columns, with an
 overall width of 6.75~inches, height of 9.0~inches, and 0.25~inches
@@ -198,7 +159,7 @@ Do not write anything on the margins.
 The paper body should be set in 10~point type with a vertical spacing
 of 11~points. Please use Times typeface throughout the text.
 
-\subsection{Title}
+\subsection{The Model}
 
 The paper title should be set in 14~point bold type and centered
 between two horizontal rules that are 1~point thick, with 1.0~inch
@@ -502,7 +463,7 @@ If using bibtex, please protect capital letters of names and
 abbreviations in titles, for example, use \{B\}ayesian or \{L\}ipschitz
 in your .bib file.
 
-\section*{Accessibility}
+\section*{Results}
 Authors are kindly asked to make their submissions as accessible as possible for everyone including people with disabilities and sensory or neurological differences.
 Tips of how to achieve this and what to pay attention to will be provided on the conference website \url{http://icml.cc/}.
 
