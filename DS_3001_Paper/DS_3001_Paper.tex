@@ -100,7 +100,6 @@
 
 \vskip 0.3in
 ]
-
 % this must go after the closing bracket ] following \twocolumn[ ...
 
 % This command actually creates the footnote in the first column
@@ -113,13 +112,12 @@
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-TEXT HERE
+
 \end{abstract}
 
 \section{Data:}
 \label{submission}
-
-The purpose of this project is to estimate the likelihood that an adult develops diabetes in the United States based on their basic demographic characteristics, as well as behavioral characteristics. The data used in this project are from the 2024 National Health Interview Survey (NHIS). This survey is conducted annually among US households and is used to monitor national health trends, as well as inform public health policy. This survey collects data on a broad range of health-related information and uses a large representative sample of the US population. Basic demographic characteristics include height, weight, age group, and BMI. Smoking, drinking, and exercise habits are some of the behavioral characteristics that will be explored later in this project. Using survey data does come with limitations, there may be response or sampling bias. The National Health Interview Survey, since 1957, has conducted confidential face-to-face interviews throughout the year, which may help reduce response bias. Dividing the country into different geographic regions ensures a broad geographic coverage, and randomization will help obtain data from a sample representative of the true population.
+The data used in this project are from the 2024 National Health Interview Survey (NHIS). This survey is conducted annually among US households and is used to monitor national health trends, as well as inform public health policy. This survey collects data on a broad range of health-related information and uses a large representative sample of the US population. Basic demographic characteristics include height, weight, age group, and BMI. Smoking, drinking, and exercise habits are some of the behavioral characteristics that will be explored later in this project. Using survey data does come with limitations, there may be response or sampling bias. The National Health Interview Survey, since 1957, has conducted confidential face-to-face interviews throughout the year, which may help reduce response bias. Dividing the country into different geographic regions ensures a broad geographic coverage, and randomization will help obtain data from a sample representative of the true population. 
 
 The first step with any dataset, especially one this large, is to identify the key variables relating to the initial question. As diabetes is the primary focus of this project, variables related to factors that increase diabetes risk were highlighted. There are three main categories of diabetes found in the dataset: gestational, pre-diabetes, and type I and II. In the original dataset, these three variables are separate [GESDIB\_A, PREDIB\_A, DIBEV\_A]. To increase readability and facilitate drawing conclusions, the three variables will be combined into a single variable. This new variable will take numeric observations, with 1 indicating 'yes', 2 indicating 'no', 7 indicating 'refused', 8 indicating 'not ascertained', and 9 indicating 'don’t know'. Distinguishing between type I and type II diabetes will be included in another variable (DIBTYPE\_A) in the answer to the previous variable is 1. In addition, the age of the surveyor when they were first diagnosed with diabetes will have its own variable DIBAGETC\_A.
 
@@ -142,33 +140,48 @@ Once the variables of our analysis have been explored, we plan to use a decision
 In order to accomplish this, we first have to encode the categorical variables using one-hot encoding or `pd.get\_dummies()`. The tree model cannot handle text labels directly so converting these labels into a numeric form allows the model to run successfully. Next, it is integral to split the data into train and test sets to give the model the ability to generalize. Allowing performance not just on the given data, but predicting for unseen, future data. We will split the data 80/20 into train and test sets, respectively, training the model. After visualization, we will choose to check the accuracy of the model using the confusion matrix method, which depicts how predictions made by the model match the observed outcomes. From there R\textsuperscript{2} and RMSE values will be calculated to evaluate the model and determine if changes need to be implemented. One of the biggest concerns with the decision tree model is overfitting which can occur if the model is split too many times. Especially with complex data, we will most likely have to prune the tree to generalize the model. 
 
 
-\section{Model}
+\section{Methods}
 
-All submissions must follow the specified format.
+\subsection{Exploratory Data Analysis (EDA)}
+Exploratory data analysis was conducted to identify patterns and relationships between predictors and diabetes status. Cross-tabulations and bar plots were used for categorical variables. Boxplots and histograms were used to visualize continuous variables. Correlation analysis showed moderate associations among age, BMI, hypertension, cholesterol, and diabetes status. This step guided feature selection and informed modeling decisions. 
 
-\subsection{Building the Model}
+\subsection{Dimensionality Reduction}
+Principal component analysis (PCA) was applied to assess multicollinearity and ensure predictors were not linearly dependent on one another. 
 
-The text of the paper should be formatted in two columns, with an
-overall width of 6.75~inches, height of 9.0~inches, and 0.25~inches
-between the columns. The left margin should be 0.75~inches and the top
-margin 1.0~inch (2.54~cm). The right and bottom margins will depend on
-whether you print on US letter or A4 paper, but all final versions
-must be produced for US letter size.
-Do not write anything on the margins.
+\section{Results}
 
-The paper body should be set in 10~point type with a vertical spacing
-of 11~points. Please use Times typeface throughout the text.
+\subsection{Diabetes Prevalence and Exploratory Analysis}
+Initial exploration of the NHIS dataset shows that diabetes prevalence is consistent with population-level estimates. Count plots revealed that a majority of respondents did not report diabetes (DIAB\_ANY = 0), while roughly 12-15\% reported a form of diabetes. Stratification by sex indicated that diabetes is more prevalent among males than it is for females. Correlation analysis of key continuous variables (age, BMI, hypertension, cholesterol) showed moderate associations with diabetes status, consistent with known risk factors. 
 
-\subsection{The Model}
+\subsection{Decision Tree Models}
+Two individual decision tree regressors were trained on the same 80/20 train/test data to predict diabetes status. 
 
-The paper title should be set in 14~point bold type and centered
-between two horizontal rules that are 1~point thick, with 1.0~inch
-between the top rule and the top edge of the page. Capitalize the
-first letter of content words and put the rest of the title in lower
-case.
-
-\subsection{Author Information for Submission}
+\begin{table}
+    \centering
+    \begin{tabular}{cccl}\toprule
+         Model&  True Positive Rate & True Negative Rate  &$R^2$\\\midrule
+         Decision Tree 1&  0.82&  0.20&0.458\\
+         Decision Tree 2&  0.842&  0.455&0.459\\ \bottomrule
+    \end{tabular}
+    \caption{Insert Title}
+    \label{tab:placeholder}
+\end{table}
 \label{author info}
+The Table 1 results show that the single decision trees are sensitive to training data. The visuals of the trees show them to be deep, meaning that the models are overfitting. True positive rates (TPR) were relatively high, indicating the model predicts diabetic cases well, but the true negative rates (TNR) were varied. This variance suggests a lack of reliability when the model predicts non-diabetic cases. The $R^2$ values were moderate, the model was able to explain \~46\% of the variance in diabetes status. 
+
+\subsection{Bootstrap Aggregation (Bagging)}
+To reduce variability and improve model stability, bootstrap aggregation was applied with 1000 resampled decision trees. The ensemble approach produced a more stable estimate, $R^2$=0.478. Compared to single decision trees, the bagged model slightly improved predictive accuracy and reduced the sensitivity to individual training sets. The ensemble methods enhance the robustness of tree-based predictions. 
+
+\subsection{Initial Analysis}
+- Overfitting in single trees: The variation in true negative rates across the two single tree models illustrates overfitting, as the trees capture noise in the training data instead of generalized patterns. 
+- Improved stability with bagging: Bootstrap aggregation stabilized predictions and slightly increased $R^2$, demonstrating the benefit of ensemble methods for models with high variance. 
+- Feature Importance: Figure 1. illustrates which variables are going to be the most useful when constructing a random forest. Aside from the diabetes variables, the chart shows age to be the most useful among the predictors. The age variable (AGEP\_A) has the highest mean decrease in impurity.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-11-21 172337.png}
+    \caption{Feature Importance Graph}
+    \label{fig:placeholder}
+\end{figure}
 
 ICML uses double-blind review, so author information must not appear. If
 you are using \LaTeX\/ and the \texttt{icml2025.sty} file, use
