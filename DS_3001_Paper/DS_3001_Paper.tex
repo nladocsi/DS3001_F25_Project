@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{booktabs} % for professional tables
+\usepackage{indentfirst}
 
 % hyperref makes hyperlinks in the resulting PDF.
 % If your build breaks (sometimes temporarily if a hyperlink spans a page)
@@ -63,43 +64,35 @@
 \icmltitle{Modeling Diabetes Risk Using  \\
          Lifestyle and Demographic Predictors}
 
-% It is OKAY to include author information, even for blind
-% submissions: the style file will automatically remove it for you
-% unless you've provided the [accepted] option to the icml2025
-% package.
-
-% List of affiliations: The first argument should be a (short)
-% identifier you will use later to specify author affiliations
-% Academic affiliations should list Department, University, City, Region, Country
-% Industry affiliations should list Company, City, Region, Country
 
 % You can specify symbols, otherwise they are numbered in order.
 % Ideally, you should not use this facility. Affiliations will be numbered
 % in order of appearance and this is the preferred way.
-\icmlsetsymbol{equal}{*}
+% Remove the equal-contribution symbol so no footnote is needed
+% \icmlsetsymbol{equal}{*}
 
 \begin{icmlauthorlist}
-\icmlauthor{Natalie Ladocsi}{equal,yyy}
-\icmlauthor{Molly O'Leary}{equal,yyy,comp}
-\icmlauthor{Maya Papadopoulos}{equal, comp}
-
-%\icmlauthor{}{sch}
-%\icmlauthor{}{sch}
-%\icmlauthor{}{sch}
+  \icmlauthor{Natalie Ladocsi}{}
+  \icmlauthor{Molly O'Leary}{}
+  \icmlauthor{Maya Papadopoulos}{}
 \end{icmlauthorlist}
 
-\icmlaffiliation{yyy}{Department of XXX, University of YYY, Location, Country}
-\icmlaffiliation{comp}{Company Name, Location, Country}
-\icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
-\icmlcorrespondingauthor{Firstname2 Lastname2}{first2.last2@www.uk}
+% Comment out affiliations (they create the numbered superscripts and footnote)
+% \icmlaffiliation{yyy}{Department of XXX, University of YYY, Location, Country}
+% \icmlaffiliation{comp}{Company Name, Location, Country}
 
-% You may provide any keywords that you
-% find helpful for describing your paper; these are used to populate
-% the "keywords" metadata in the PDF but will not be shown in the document
+% Comment out corresponding author footnotes (these show up in the bottom-left)
+% \icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
+% \icmlcorrespondingauthor{Firstname2 Lastname2}{first2.last2@www.uk}
+
+% Keywords are fine to keep; they don't print on the page
 \icmlkeywords{Machine Learning, ICML}
 
 \vskip 0.3in
 ]
+
+\setlength{\parindent}{1.5em}  % how big the indent is
+\setlength{\parskip}{0pt} 
 % this must go after the closing bracket ] following \twocolumn[ ...
 
 % This command actually creates the footnote in the first column
@@ -109,46 +102,70 @@
 % Remove it (just {}) if you do not need this facility.
 
 %\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
-\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+%\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
+The purpose of this project is to estimate the likelihood that an adult develops diabetes in the United States based on demographic and behavioral characteristics. Diabetes is one of the most prevalent chronic diseases in the U.S. and is associated with severe long-term health complications. As rates of obesity and physical inactivity rise, the ability to identify factors that lead to increased risk is critical for prevention and early intervention efforts. Through examining social, behavioral, and biological variables of interest, this project aims to better understand patterns of diabetes risk across the adult population. 
+To address this question, we use data from the 2024 National Health Interview Survey (NHIS), which provides information on respondents' health, socioeconomic conditions, and lifestyle behaviors, making it well-suited for analyzing diabetes risk factors. In collecting their data, the NHIS gathers results from around the country. Therefore conclusions drawn reflect larger national trends and are not limited by sampling constraints.
+
+After identifying key variables related to diabetes and its potential predictors, we constructed a unified diabetes indicator variable by combining three separate variables. We merged gestational diabetes, pre-diabetes, and diagnosed diabetes into a single outcome variable. This outcome variable would be used to indicate if a respondent had diabetes. This allowed both diagnosed and at-risk individuals to be captured in the outcome because pre-diabetes and gestational diabetes increases the likelihood of developing type 2 diabetes. 
+
+In order to model diabetes risk, DecisionTreeClassifiers were used due to their ability to handle categorical variables and non-linear relationships. The dataset was split into an 80/20 train-test split that was used universally in all the models to ensure consistency and accuracy in the comparison of results. The two individual decision trees achieved similar accuracy values of around 0.78, but high true positive and low true negative rates indicating instability. Improvement of the model revealed that the optimal maximum tree depth value was 10. In order to address variance found in the confusion matrices of the individual trees, an ensemble of 1,000 trees were bootstrapped to improve stability and slightly increased the accuracy to 0.788. A random forest model reaffirmed these results and identified age and high cholesterol as the most influential predictors. Overall, the models were successful in identifying risk factors, but the precision of individual predictions was limited. 
 
 \end{abstract}
 
-\section{Data:}
+\section{Data Description}
 \label{submission}
-The data used in this project are from the 2024 National Health Interview Survey (NHIS). This survey is conducted annually among US households and is used to monitor national health trends, as well as inform public health policy. This survey collects data on a broad range of health-related information and uses a large representative sample of the US population. Basic demographic characteristics include height, weight, age group, and BMI. Smoking, drinking, and exercise habits are some of the behavioral characteristics that will be explored later in this project. Using survey data does come with limitations, there may be response or sampling bias. The National Health Interview Survey, since 1957, has conducted confidential face-to-face interviews throughout the year, which may help reduce response bias. Dividing the country into different geographic regions ensures a broad geographic coverage, and randomization will help obtain data from a sample representative of the true population. 
+With the aim of this project being to develop a model that classifies whether or not an adult has diabetes in the United States, the NHIS data was essential to understand. In-person household interviews are conducted and a variety of yes/no, and multiple-choice type questions are used to obtain data. The variables and data collection through this survey on demographic and behavioral characteristics are what we turned to when selecting significant variables. It was first necessary to classify which variables would allow for a determination on if our respondent actually had diabetes. The three variables used to identify a diabetes diagnosis are “Ever had diabetes,” “Ever had prediabetes,” “Ever had gestational diabetes”. For those three data Variables: 
+\begin{itemize}
+    \item GESDIB\_A
+    \item PREDIB\_A
+    \item DIBEV\_A
+\end{itemize}
+A 1 in the data collection indicates a “Yes”, a 0 indicates a “No”, and 7-9 indicates either “Refused to answer”, “Don’t know”, or “Not ascertained”. For proper cleaning the three variables were combined into one new variable, DIAB\_ANY. Furthermore, we removed all values 7-9, replacing all with the nan value.
 
-The first step with any dataset, especially one this large, is to identify the key variables relating to the initial question. As diabetes is the primary focus of this project, variables related to factors that increase diabetes risk were highlighted. There are three main categories of diabetes found in the dataset: gestational, pre-diabetes, and type I and II. In the original dataset, these three variables are separate [GESDIB\_A, PREDIB\_A, DIBEV\_A]. To increase readability and facilitate drawing conclusions, the three variables will be combined into a single variable. This new variable will take numeric observations, with 1 indicating 'yes', 2 indicating 'no', 7 indicating 'refused', 8 indicating 'not ascertained', and 9 indicating 'don’t know'. Distinguishing between type I and type II diabetes will be included in another variable (DIBTYPE\_A) in the answer to the previous variable is 1. In addition, the age of the surveyor when they were first diagnosed with diabetes will have its own variable DIBAGETC\_A.
+Now that our target variable is cleaned and manageable we turned to select our predictor variables. After looking through all the possible variables in the codebook we knew the initial predictor variables must be basic demographic identifiers. We selected age, sex, race, region of household: 
+\begin{itemize}
+    \item SEX\_A
+    \item RACELLP\_A
+    \item REGION
+\end{itemize}
+Once again we combined 7-9 response options, replacing the values with nan. These factors are a good initial start for a diabetes prediction model. Furthermore, we wanted more specific characteristics for lifestyle habits and situational factors. The factors we chose were, closeness to poverty line, body mass index, education level of sample adults, general health status, frequency of leisurely walks.
+\begin{itemize}
+    \item RATCAT\_A
+    \item EDUCP\_A
+    \item PHSTAT\_A
+    \item WLKLEIS\_A
+\end{itemize}
+Those four variables were again cleaned to have all the vague 7-9 responses combined and changed to be nan values. 
+After a more broad but important look into the lifestyle of the responders through these variables we wanted to target some of the most influential factors that correlate to diabetes. With some basic background research into diabetes we found that cholesterol levels along with levels of hypertension are two of the most determining factors that could predict if an adult could suffer from diabetes in their future. With this in mind we finished off our predictive variable selection with “Ever had high cholesterol?”, “Have you ever been told you had hypertension?”, and the surveyor's BMI and age.  
+\begin{itemize}
+    \item BMICAT\_A
+    \item HYPEV\_A
+    \item CHLEV\_A
+    \item AGEP\_A
+\end{itemize}
+These were all continuous variables and therefore did not have to be recoded for vague responses as the other variables above did.
+The final predictive factor that needed significant cleaning was regarding the food insecurity variables. We thought determining the connection diabetes had to food insecurity would provide significant information and a more accurate predictive model. Handling these separate variables similarly to the overall diabetes variable, we took 5 variables that all had relevance towards running out of food, worries of being hungry, or used food stamps. Combining these variables we were left with a new variable named, FOOD\_INS. The new code for this variable is “1” indicates food insecurity present, while “0” indicates no food insecurity. One last time the 7-9 response code was replaced with nan values. 
 
-The variables outlined above gather information about the surveyor's diagnosis of diabetes. Since the goal is also to examine contributing factors to mitigate the risk of diabetes, the predictor variables must be included. One broad category is food insecurity, which contains the variables: [FDSRUNOUT\_A, worry food would run out, FDSLAST\_A, food didn't last, FDSHUNGRY\_A, hungry because not enough money for food]. Further analysis may reveal which of the variables among the three should be prioritized, or if all are relevant. Additionally, demographic characteristics will be analyzed. These include sex (SEX\_A), home location (REGION), race/ethnicity (RACEALLP\_A), income level (RATCAT\_A), education level of sample adults (EDUCP\_A). Lastly, physical lifestyle habits will also be factored through physical activity (MONDNR\_A), and weekly walking (WLKEISDAY\_A). 
+Overall cleaning for this dataset was very straightforward. With our chosen dataset most of the variables are categorical, but given a numerical key. This means the formatting of the binary number keys did not need adjustment because the respondent was not given the freedom to personalize their response. The final step before moving on to coding our model was creating a new table with only the relevant data. The NHIS data is extremely large and therefore we were unable to attach the full CSV to our github repository. By creating a new table with only the relevant data a more manageable file can be analyzed. 
 
-The data used were obtained from a survey; therefore, not all surveyors answered every question. In addition, those surveyed may not have been entirely truthful or provided accurate information. This leaves us with NA values that will need to be wrangled before we begin data analysis. Therefore, conclusions can be drawn but cannot be claimed with absolute certainty. This data set has hundreds of variables, so we will remove many variables that we believe to be insignificant. We need to do testing to ensure that we remove the correct ones. 
+\section{Methods and Results}
 
-\subsection{Pre-Analysis Plan}
+\subsection{Data Cleaning and Exploratory Analysis}
 
+\subsection{Individual Decision Tree Models}
 
+\subsection{Determining Max Depth Value}
 
-\medskip
+\subsection{Bootstrap Aggregation}
 
-As outlined in our Data Description, the goal is to develop a model that can classify whether or not a person has diabetes in the United States, based on demographic and behavioral information. Within the data set, information about numerous aspects of the surveyor is outlined, including whether or not they have diabetes. Through training the model and establishing correlation patterns, the goal is to create a model that can estimate whether or not one is likely to develop diabetes depending on the information entered. We will perform different analysis methods such as EDA and PCA to select the variables included in our final model.  
+\subsection{Random Forest and Feature Importance}
 
-After cleaning, organizing, and wrangling the data, we will begin with exploratory data analysis (EDA) to help us better understand the relationships between each variable and the response before modeling. In this step, we will cross-tabulate diabetes with several categorical variables to identify relationships and patterns. Furthermore, the use of bar plots will help us visualize distributions, identify outliers, and show us variables that potentially need scaling. This initial exploratory step will help us select significant variables to include in our next modeling phase.  Because the dataset contains many correlated features, we will apply principal component analysis(PCA). The normalized eigenvalues can be plotted with a scree plot, or summed to determine the cumulative $R^2$, helping us capture sources of variance in the data.  
+\subsection{Summary of Findings}
 
-Once the variables of our analysis have been explored, we plan to use a decision tree model for further analysis. Due to the complexity of our data and the multitude of factors influencing the diabetic outcome of the patient, we felt this was the most appropriate model to use. A decision tree will be compatible with the lack of quantitative or numeric data in our dataset. Trees are also non-reliant on linear relationships which we are not likely to see in our data. The tree itself will provide an easily interpretable visualization of the decision-making pathway. However, since decision trees output a categorical variable, we will have to encode or determine some threshold with diabetes being a yes or no.
+\section{Conclusion}
 
-In order to accomplish this, we first have to encode the categorical variables using one-hot encoding or `pd.get\_dummies()`. The tree model cannot handle text labels directly so converting these labels into a numeric form allows the model to run successfully. Next, it is integral to split the data into train and test sets to give the model the ability to generalize. Allowing performance not just on the given data, but predicting for unseen, future data. We will split the data 80/20 into train and test sets, respectively, training the model. After visualization, we will choose to check the accuracy of the model using the confusion matrix method, which depicts how predictions made by the model match the observed outcomes. From there R\textsuperscript{2} and RMSE values will be calculated to evaluate the model and determine if changes need to be implemented. One of the biggest concerns with the decision tree model is overfitting which can occur if the model is split too many times. Especially with complex data, we will most likely have to prune the tree to generalize the model. 
-
-
-\section{Methods}
-
-\subsection{Exploratory Data Analysis (EDA)}
-Exploratory data analysis was conducted to identify patterns and relationships between predictors and diabetes status. Cross-tabulations and bar plots were used for categorical variables. Boxplots and histograms were used to visualize continuous variables. Correlation analysis showed moderate associations among age, BMI, hypertension, cholesterol, and diabetes status. This step guided feature selection and informed modeling decisions. 
-
-\subsection{Dimensionality Reduction}
-Principal component analysis (PCA) was applied to assess multicollinearity and ensure predictors were not linearly dependent on one another. 
-
-\section{Results}
 
 \subsection{Diabetes Prevalence and Exploratory Analysis}
 Initial exploration of the NHIS dataset shows that diabetes prevalence is consistent with population-level estimates. Count plots revealed that a majority of respondents did not report diabetes (DIAB\_ANY = 0), while roughly 12-15\% reported a form of diabetes. Stratification by sex indicated that diabetes is more prevalent among males than it is for females. Correlation analysis of key continuous variables (age, BMI, hypertension, cholesterol) showed moderate associations with diabetes status, consistent with known risk factors. 
@@ -556,18 +573,3 @@ The $\mathtt{\backslash onecolumn}$ command above can be kept in place if you pr
 
 
 \end{document}
-
-
-% This document was modified from the file originally made available by
-% Pat Langley and Andrea Danyluk for ICML-2K. This version was created
-% by Iain Murray in 2018, and modified by Alexandre Bouchard in
-% 2019 and 2021 and by Csaba Szepesvari, Gang Niu and Sivan Sabato in 2022.
-% Modified again in 2023 and 2024 by Sivan Sabato and Jonathan Scarlett.
-% Previous contributors include Dan Roy, Lise Getoor and Tobias
-% Scheffer, which was slightly modified from the 2010 version by
-% Thorsten Joachims & Johannes Fuernkranz, slightly modified from the
-% 2009 version by Kiri Wagstaff and Sam Roweis's 2008 version, which is
-% slightly modified from Prasad Tadepalli's 2007 version which is a
-% lightly changed version of the previous year's version by Andrew
-% Moore, which was in turn edited from those of Kristian Kersting and
-% Codrina Lauth. Alex Smola contributed to the algorithmic style files.
