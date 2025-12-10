@@ -1,0 +1,15 @@
+xvGESDIB_A: Ever had gestational diabetes
+PREDIB_A: Ever had prediabetes
+DIBEV_A: Ever had diabetes
+DIB_ANY: Ever had diabetes, prediabetes, or gestational diabetes with 1 denoting a participant coded as had. 
+DIBAGETC_A:  
+SEX_A: Sex of sample adult with 1 denoting a participant coded as male
+RACELLP_A:
+REGION:
+RATCAT_A:
+EDUCP_A:
+PHSTAT_A:
+WLKLEIS_A:
+BMICAT_A:
+HYPEV_A: 
+CHLEV_A: 
