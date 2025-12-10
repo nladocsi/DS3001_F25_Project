@@ -106,11 +106,12 @@
 
 \begin{abstract}
 The purpose of this project is to estimate the likelihood that an adult develops diabetes in the United States based on demographic and behavioral characteristics. Diabetes is one of the most prevalent chronic diseases in the U.S. and is associated with severe long-term health complications. As rates of obesity and physical inactivity rise, the ability to identify factors that lead to increased risk is critical for prevention and early intervention efforts. Through examining social, behavioral, and biological variables of interest, this project aims to better understand patterns of diabetes risk across the adult population. 
+
 To address this question, we use data from the 2024 National Health Interview Survey (NHIS), which provides information on respondents' health, socioeconomic conditions, and lifestyle behaviors, making it well-suited for analyzing diabetes risk factors. In collecting their data, the NHIS gathers results from around the country. Therefore conclusions drawn reflect larger national trends and are not limited by sampling constraints.
 
 After identifying key variables related to diabetes and its potential predictors, we constructed a unified diabetes indicator variable by combining three separate variables. We merged gestational diabetes, pre-diabetes, and diagnosed diabetes into a single outcome variable. This outcome variable would be used to indicate if a respondent had diabetes. This allowed both diagnosed and at-risk individuals to be captured in the outcome because pre-diabetes and gestational diabetes increases the likelihood of developing type 2 diabetes. 
 
-In order to model diabetes risk, DecisionTreeClassifiers were used due to their ability to handle categorical variables and non-linear relationships. The dataset was split into an 80/20 train-test split that was used universally in all the models to ensure consistency and accuracy in the comparison of results. The two individual decision trees achieved similar accuracy values of around 0.78, but high true positive and low true negative rates indicating instability. Improvement of the model revealed that the optimal maximum tree depth value was 10. In order to address variance found in the confusion matrices of the individual trees, an ensemble of 1,000 trees were bootstrapped to improve stability and slightly increased the accuracy to 0.788. A random forest model reaffirmed these results and identified age and high cholesterol as the most influential predictors. Overall, the models were successful in identifying risk factors, but the precision of individual predictions was limited. 
+In order to model diabetes risk, DecisionTreeClassifiers were used due to their ability to handle categorical variables and non-linear relationships. The dataset was split into an 80/20 train-test split that was used universally in all the models to ensure consistency and accuracy in the comparison of results. The two individual decision trees achieved similar accuracy values of around 0.78, but high true positive and low true negative rates indicating instability. Improvement of the model revealed that the optimal maximum tree depth value was 10. In order to address variance found in the confusion matrices of the individual trees, an ensemble of 1,000 trees were bootstrapped to improve stability and slightly increased the accuracy to 0.789. A random forest model reaffirmed these results and identified age and high cholesterol as the most influential predictors. Overall, the models were successful in identifying risk factors, but the precision of individual predictions was limited. 
 
 \end{abstract}
 
@@ -118,41 +119,68 @@ In order to model diabetes risk, DecisionTreeClassifiers were used due to their 
 \label{submission}
 With the aim of this project being to develop a model that classifies whether or not an adult has diabetes in the United States, the NHIS data was essential to understand. In-person household interviews are conducted and a variety of yes/no, and multiple-choice type questions are used to obtain data. The variables and data collection through this survey on demographic and behavioral characteristics are what we turned to when selecting significant variables. It was first necessary to classify which variables would allow for a determination on if our respondent actually had diabetes. The three variables used to identify a diabetes diagnosis are “Ever had diabetes,” “Ever had prediabetes,” “Ever had gestational diabetes”. For those three data Variables: 
 \begin{itemize}
-    \item GESDIB\_A
-    \item PREDIB\_A
-    \item DIBEV\_A
+    \item GESDIB\_A: Ever had gestational diabetes with 1 denoting yes and 2 no
+    \item PREDIB\_A: Ever had prediabetes with 1 denoting yes and 2 no
+    \item DIBEV\_A: Ever had diabetes with 1 denoting yes and 2 no
 \end{itemize}
 A 1 in the data collection indicates a “Yes”, a 0 indicates a “No”, and 7-9 indicates either “Refused to answer”, “Don’t know”, or “Not ascertained”. For proper cleaning the three variables were combined into one new variable, DIAB\_ANY. Furthermore, we removed all values 7-9, replacing all with the nan value.
-
 Now that our target variable is cleaned and manageable we turned to select our predictor variables. After looking through all the possible variables in the codebook we knew the initial predictor variables must be basic demographic identifiers. We selected age, sex, race, region of household: 
 \begin{itemize}
-    \item SEX\_A
-    \item RACELLP\_A
-    \item REGION
+    \item SEX\_A: Sex of sample adult, with 1 denoting a participant coded as male and 2 a participant as female
+    \item RACELLP\_A: Race of participant
+    \item REGION: Region participant's household is located in
 \end{itemize}
 Once again we combined 7-9 response options, replacing the values with nan. These factors are a good initial start for a diabetes prediction model. Furthermore, we wanted more specific characteristics for lifestyle habits and situational factors. The factors we chose were, closeness to poverty line, body mass index, education level of sample adults, general health status, frequency of leisurely walks.
 \begin{itemize}
-    \item RATCAT\_A
-    \item EDUCP\_A
-    \item PHSTAT\_A
-    \item WLKLEIS\_A
+    \item RATCAT\_A: Ratio of family income to poverty threshold for patient
+    \item EDUCP\_A: Educational level of patient
+    \item PHSTAT\_A: General health status
+    \item WLKLEIS\_A: If the patient walked for leisure in the past 7 days with 1 denoting yes and 2 no
 \end{itemize}
 Those four variables were again cleaned to have all the vague 7-9 responses combined and changed to be nan values. 
 After a more broad but important look into the lifestyle of the responders through these variables we wanted to target some of the most influential factors that correlate to diabetes. With some basic background research into diabetes we found that cholesterol levels along with levels of hypertension are two of the most determining factors that could predict if an adult could suffer from diabetes in their future. With this in mind we finished off our predictive variable selection with “Ever had high cholesterol?”, “Have you ever been told you had hypertension?”, and the surveyor's BMI and age.  
 \begin{itemize}
-    \item BMICAT\_A
-    \item HYPEV\_A
-    \item CHLEV\_A
-    \item AGEP\_A
+    \item BMICAT\_A: Categorical body mass index of patient
+    \item HYPEV\_A: Ever been told they have hypertension with 1 denoting yes and 2 no
+    \item CHLEV\_A: Ever had high cholesterol with 1 denoting yes and 2 no
+    \item AGEP\_A: Age of patient
 \end{itemize}
 These were all continuous variables and therefore did not have to be recoded for vague responses as the other variables above did.
 The final predictive factor that needed significant cleaning was regarding the food insecurity variables. We thought determining the connection diabetes had to food insecurity would provide significant information and a more accurate predictive model. Handling these separate variables similarly to the overall diabetes variable, we took 5 variables that all had relevance towards running out of food, worries of being hungry, or used food stamps. Combining these variables we were left with a new variable named, FOOD\_INS. The new code for this variable is “1” indicates food insecurity present, while “0” indicates no food insecurity. One last time the 7-9 response code was replaced with nan values. 
 
 Overall cleaning for this dataset was very straightforward. With our chosen dataset most of the variables are categorical, but given a numerical key. This means the formatting of the binary number keys did not need adjustment because the respondent was not given the freedom to personalize their response. The final step before moving on to coding our model was creating a new table with only the relevant data. The NHIS data is extremely large and therefore we were unable to attach the full CSV to our github repository. By creating a new table with only the relevant data a more manageable file can be analyzed. 
+ 
 
 \section{Methods and Results}
 
+
 \subsection{Data Cleaning and Exploratory Analysis}
+The dataset was first cleaned by removing columns that were not of interest and keeping only those outlined in the data description above. Our variable of interest, which was the diabetes indicator (DIAB\_ANY) was treated as a binary outcome. If the respondent reported any form of diabetes (gestational, pre-diabetes, or previous diabetes diagnosis) the variable equaled 1. Otherwise its value was 0 indicating that the person was non-diabetic. All variables used to construct the DIAB\_ANY outcome were removed from the predictor set to prevent leakage. Although initially categorical, all of our variables were numerically encoded in the original dataset so those did not need to be re-encoded. After cleaning and subsetting to our variables of interest, the final analytic sample contained 32,629 adults. 
+
+The simple count plot in Figure 1 shows that the majority of respondents do not report diabetes (DIAB\_ANY = 0), while 24.08 percent report some form of diabetes. In 2021, crude estimates conducted by the CDC found that 38.4 million people or 11.6 percent of the U.S. population had diabetes. This value is lower than that found in our data, but this could be attributed to the fact that those with diabetes are more likely to voluntarily report and fill out the survey than those without. Figure 2 highlights that there is a higher prevalence of diabetes among females (25.08) than males (22.06). In this graph a value of 1 for SEX\_A indicates that the patient is male and 2 indicates that the patient is female. This could also be attributed to the fact that a greater proportion of the patients, with and without diabetes, are female.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.11.41 PM2.png}
+    \caption{Diabetes Prevalence in the Data}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.22.07 PM.png}
+    \caption{Diabetes Prevalence by Sex}
+    \label{fig:placeholder}
+\end{figure}
+
+To investigate variables with continuous value ranges, we examined correlations among age (AGEP\_A), BMI category (BMICAT\_A), self-reported hypertension (HYPEV\_A), and self-reported high cholesterol (CHLEV\_A). These variables show moderate positive associations with diabetes status, aligning with well-known clinical risk factors. Figure 3 which is a correlation heatmap highlights that age and BMI are more strongly associated with DIAB\_ANY, meaning that they are critical to predicting diabetes and were important to include in our tree-based models.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.24.14 PM.png}
+    \caption{Correlation Heatmap of Key Predictors}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Individual Decision Tree Models}
 
