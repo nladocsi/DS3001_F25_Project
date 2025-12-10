@@ -6,10 +6,11 @@ DIBAGETC_A: Age first diagnosed with diabetes
 SEX_A: Sex of sample adult, with 1 denoting a participant coded as male and 2 a participant as female
 RACALLP_A: Race of participant
 REGION: Region participant's household is located in
-RATCAT_A:Ratio of family income to poverty threshold for patient
+RATCAT_A: Ratio of family income to poverty threshold for patient
 EDUCP_A: Educational level of patient
 PHSTAT_A: General health status
 WLKLEIS_A: If the patient walked for leisure in the past 7 days with 1 denoting yes and 2 no
 BMICAT_A: Categorical body mass index of patient
-HYPEV_A: Eer been told they have hypertension with 1 denoting yes and 2 no
+HYPEV_A: Ever been told they have hypertension with 1 denoting yes and 2 no
 CHLEV_A: Ever had high cholesterol with 1 denoting yes and 2 no
+AGEP_A: Age of patient
