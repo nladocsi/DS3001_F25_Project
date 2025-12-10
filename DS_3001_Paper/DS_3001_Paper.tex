@@ -184,6 +184,34 @@ To investigate variables with continuous value ranges, we examined correlations 
 
 \subsection{Individual Decision Tree Models}
 
+After initial visualization and exploratory analysis we choose to utilize a decision tree model to further examine our data. A decision tree model was chosen because it handles categorical features, when encoded numerically, extremely efficiently. Furthermore, there is no assumption of linearity that occurs with a decision tree model. While exploring the relationship between diabetes and different demographic characters it was unlikely that the variables affected risk linearly. Additionally, the interpretability of a decision tree model is high, meaning the logic is easily understood. The visualization of this model allows for easy analysis on which variables matter most, the variables closest to the top of the tree are often the most influential. Lastly, utilizing a decision tree model allows analysis into how different variables work together to influence the risk of diabetes. The variables are not all looked at in isolation, but instead the splits reflect combinations of characteristics. 
+With that justification in mind we first fit two individual decision trees to predict diabetes status from demographic, health, and food-insecurity-related variables. The cleaned dataset was split into an 80/20 train-test partition and this train-test split was applied to all models and used consistently to ensure accurate comparison. All models were trained on the 80 percent training set and evaluated on the 20 percent test set. The 80/20 split rationale is a standard practice in model learning, but specifically for this data set it was a necessary protocol. Our NHIS dataset is significantly large so this split allows for adequate data for our training and evaluation. 80 percent being our training portion ensures the model has a significant amount of examples to determine the patterns across the different demographic and health characteristics. The 20 percent test set, also allows for statistically reliable estimates as well as detection of overfit. 
+
+Each tree was fit using a DecisionTreeClassifier with:
+\begin{itemize}
+    \item Max\_depth = 15: to prevent unnecessarily deep trees that could memorize the training data instead of learning the patterns.
+    \item Min\_samples\_leaf = 1 percent of training sample size: This prevents the tree from creating trees that are too small or specific, limiting overfitting
+\end{itemize}
+To illustrate the instability of single trees, we trained two trees on different samples of the training data. However, the same test set was used to evaluate the performance of each tree. Since diabetes status is a binary outcome, the model was evaluated using classification-based metrics rather than regressors like R2. Overall this approach to use multiple trees demonstrates that fundamentally decision tree models have high variance. Therefore for each tree we evaluated:
+\begin{itemize}
+    \item Accuracy which provides an overall measure of correctness
+    \item True Positive Rate (TPR) which describes the proportion of diabetic respondents correctly predicted as diabetic
+    \item True Negative Rate (TNR) which describes the proportion of non-diabetic respondents correctly predicted as non-diabetic
+    \item Confusion matrices which provide the raw counts that underlie the rates. This allows us to see the absolute number of each error type.
+\end{itemize}
+
+\begin{table}
+    \centering
+    \begin{tabular}{cccl}\toprule
+         Model& Accuracy& True Positive Rate & True Negative Rate\\\midrule
+         Decision Tree 1&  0.784&  0.932&0.320\\
+         Decision Tree 2&  0.782&  0.928&0.322\\ \bottomrule
+    \end{tabular}
+    \caption{Performance of Single Decision Trees on the 20 Percent Test Set}
+    \label{tab:placeholder}
+\end{table}
+
+
 \subsection{Determining Max Depth Value}
 
 \subsection{Bootstrap Aggregation}
@@ -201,16 +229,7 @@ Initial exploration of the NHIS dataset shows that diabetes prevalence is consis
 \subsection{Decision Tree Models}
 Two individual decision tree regressors were trained on the same 80/20 train/test data to predict diabetes status. 
 
-\begin{table}
-    \centering
-    \begin{tabular}{cccl}\toprule
-         Model&  True Positive Rate & True Negative Rate  &$R^2$\\\midrule
-         Decision Tree 1&  0.82&  0.20&0.458\\
-         Decision Tree 2&  0.842&  0.455&0.459\\ \bottomrule
-    \end{tabular}
-    \caption{Insert Title}
-    \label{tab:placeholder}
-\end{table}
+
 \label{author info}
 The Table 1 results show that the single decision trees are sensitive to training data. The visuals of the trees show them to be deep, meaning that the models are overfitting. True positive rates (TPR) were relatively high, indicating the model predicts diabetic cases well, but the true negative rates (TNR) were varied. This variance suggests a lack of reliability when the model predicts non-diabetic cases. The $R^2$ values were moderate, the model was able to explain \~46\% of the variance in diabetes status. 
 
