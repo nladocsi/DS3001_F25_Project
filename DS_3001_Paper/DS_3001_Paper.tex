@@ -229,16 +229,7 @@ Initial exploration of the NHIS dataset shows that diabetes prevalence is consis
 \subsection{Decision Tree Models}
 Two individual decision tree regressors were trained on the same 80/20 train/test data to predict diabetes status. 
 
-\begin{table}
-    \centering
-    \begin{tabular}{cccl}\toprule
-         Model&  True Positive Rate & True Negative Rate  &$R^2$\\\midrule
-         Decision Tree 1&  0.82&  0.20&0.458\\
-         Decision Tree 2&  0.842&  0.455&0.459\\ \bottomrule
-    \end{tabular}
-    \caption{Insert Title}
-    \label{tab:placeholder}
-\end{table}
+
 \label{author info}
 The Table 1 results show that the single decision trees are sensitive to training data. The visuals of the trees show them to be deep, meaning that the models are overfitting. True positive rates (TPR) were relatively high, indicating the model predicts diabetic cases well, but the true negative rates (TNR) were varied. This variance suggests a lack of reliability when the model predicts non-diabetic cases. The $R^2$ values were moderate, the model was able to explain \~46\% of the variance in diabetes status. 
 
