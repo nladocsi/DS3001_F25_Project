@@ -250,29 +250,7 @@ Through this model creation there were also some limitations that we came across
 \section{Conclusion}
 
 
-\subsection{Diabetes Prevalence and Exploratory Analysis}
-Initial exploration of the NHIS dataset shows that diabetes prevalence is consistent with population-level estimates. Count plots revealed that a majority of respondents did not report diabetes (DIAB\_ANY = 0), while roughly 12-15\% reported a form of diabetes. Stratification by sex indicated that diabetes is more prevalent among males than it is for females. Correlation analysis of key continuous variables (age, BMI, hypertension, cholesterol) showed moderate associations with diabetes status, consistent with known risk factors. 
 
-\subsection{Decision Tree Models}
-Two individual decision tree regressors were trained on the same 80/20 train/test data to predict diabetes status. 
-
-
-\label{author info}
-The Table 1 results show that the single decision trees are sensitive to training data. The visuals of the trees show them to be deep, meaning that the models are overfitting. True positive rates (TPR) were relatively high, indicating the model predicts diabetic cases well, but the true negative rates (TNR) were varied. This variance suggests a lack of reliability when the model predicts non-diabetic cases. The $R^2$ values were moderate, the model was able to explain \~46\% of the variance in diabetes status. 
-
-\subsection{Bootstrap Aggregation (Bagging)}
-To reduce variability and improve model stability, bootstrap aggregation was applied with 1000 resampled decision trees. The ensemble approach produced a more stable estimate, $R^2$=0.478. Compared to single decision trees, the bagged model slightly improved predictive accuracy and reduced the sensitivity to individual training sets. The ensemble methods enhance the robustness of tree-based predictions. 
-
-\subsection{Initial Analysis}
-- Overfitting in single trees: The variation in true negative rates across the two single tree models illustrates overfitting, as the trees capture noise in the training data instead of generalized patterns. 
-- Improved stability with bagging: Bootstrap aggregation stabilized predictions and slightly increased $R^2$, demonstrating the benefit of ensemble methods for models with high variance. 
-- Feature Importance: Figure 1. illustrates which variables are going to be the most useful when constructing a random forest. Aside from the diabetes variables, the chart shows age to be the most useful among the predictors. The age variable (AGEP\_A) has the highest mean decrease in impurity.
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-11-21 172337.png}
-    \caption{Feature Importance Graph}
-    \label{fig:placeholder}
-\end{figure}
 
 ICML uses double-blind review, so author information must not appear. If
 you are using \LaTeX\/ and the \texttt{icml2025.sty} file, use
