@@ -64,13 +64,6 @@
 \icmltitle{Modeling Diabetes Risk Using  \\
          Lifestyle and Demographic Predictors}
 
-
-% You can specify symbols, otherwise they are numbered in order.
-% Ideally, you should not use this facility. Affiliations will be numbered
-% in order of appearance and this is the preferred way.
-% Remove the equal-contribution symbol so no footnote is needed
-% \icmlsetsymbol{equal}{*}
-
 \begin{icmlauthorlist}
   \icmlauthor{Natalie Ladocsi}{}
   \icmlauthor{Molly O'Leary}{}
@@ -157,7 +150,7 @@ Overall cleaning for this dataset was very straightforward. With our chosen data
 \subsection{Data Cleaning and Exploratory Analysis}
 The dataset was first cleaned by removing columns that were not of interest and keeping only those outlined in the data description above. Our variable of interest, which was the diabetes indicator (DIAB\_ANY) was treated as a binary outcome. If the respondent reported any form of diabetes (gestational, pre-diabetes, or previous diabetes diagnosis) the variable equaled 1. Otherwise its value was 0 indicating that the person was non-diabetic. All variables used to construct the DIAB\_ANY outcome were removed from the predictor set to prevent leakage. Although initially categorical, all of our variables were numerically encoded in the original dataset so those did not need to be re-encoded. After cleaning and subsetting to our variables of interest, the final analytic sample contained 32,629 adults. 
 
-The simple count plot in Figure 1 shows that the majority of respondents do not report diabetes (DIAB\_ANY = 0), while 24.08 percent report some form of diabetes. In 2021, crude estimates conducted by the CDC found that 38.4 million people or 11.6 percent of the U.S. population had diabetes. This value is lower than that found in our data, but this could be attributed to the fact that those with diabetes are more likely to voluntarily report and fill out the survey than those without. Figure 2 highlights that there is a higher prevalence of diabetes among females (25.08) than males (22.06). In this graph a value of 1 for SEX\_A indicates that the patient is male and 2 indicates that the patient is female. This could also be attributed to the fact that a greater proportion of the patients, with and without diabetes, are female.
+The simple count plot in Figure 1 shows that the majority of respondents do not report diabetes (DIAB\_ANY = 0), while 24.08\% report some form of diabetes. In 2021, crude estimates conducted by the CDC found that 38.4 million people or 11.6\% of the U.S. population had diabetes. This value is lower than that found in our data, but this could be attributed to the fact that those with diabetes are more likely to voluntarily report and fill out the survey than those without. Figure 2 highlights that there is a higher prevalence of diabetes among females (25.08) than males (22.06). In this graph a value of 1 for SEX\_A indicates that the patient is male and 2 indicates that the patient is female. This could also be attributed to the fact that a greater proportion of the patients, with and without diabetes, are female.
 
 \begin{figure}
     \centering
@@ -185,12 +178,12 @@ To investigate variables with continuous value ranges, we examined correlations 
 \subsection{Individual Decision Tree Models}
 
 After initial visualization and exploratory analysis we choose to utilize a decision tree model to further examine our data. A decision tree model was chosen because it handles categorical features, when encoded numerically, extremely efficiently. Furthermore, there is no assumption of linearity that occurs with a decision tree model. While exploring the relationship between diabetes and different demographic characters it was unlikely that the variables affected risk linearly. Additionally, the interpretability of a decision tree model is high, meaning the logic is easily understood. The visualization of this model allows for easy analysis on which variables matter most, the variables closest to the top of the tree are often the most influential. Lastly, utilizing a decision tree model allows analysis into how different variables work together to influence the risk of diabetes. The variables are not all looked at in isolation, but instead the splits reflect combinations of characteristics. 
-With that justification in mind we first fit two individual decision trees to predict diabetes status from demographic, health, and food-insecurity-related variables. The cleaned dataset was split into an 80/20 train-test partition and this train-test split was applied to all models and used consistently to ensure accurate comparison. All models were trained on the 80 percent training set and evaluated on the 20 percent test set. The 80/20 split rationale is a standard practice in model learning, but specifically for this data set it was a necessary protocol. Our NHIS dataset is significantly large so this split allows for adequate data for our training and evaluation. 80 percent being our training portion ensures the model has a significant amount of examples to determine the patterns across the different demographic and health characteristics. The 20 percent test set, also allows for statistically reliable estimates as well as detection of overfit. 
+With that justification in mind we first fit two individual decision trees to predict diabetes status from demographic, health, and food-insecurity-related variables. The cleaned dataset was split into an 80/20 train-test partition and this train-test split was applied to all models and used consistently to ensure accurate comparison. All models were trained on the 80 \% training set and evaluated on the 20 \% test set. The 80/20 split rationale is a standard practice in model learning, but specifically for this data set it was a necessary protocol. Our NHIS dataset is significantly large so this split allows for adequate data for our training and evaluation. 80 \% being our training portion ensures the model has a significant amount of examples to determine the patterns across the different demographic and health characteristics. The 20 \% test set, also allows for statistically reliable estimates as well as detection of overfit. 
 
 Each tree was fit using a DecisionTreeClassifier with:
 \begin{itemize}
     \item Max\_depth = 15: to prevent unnecessarily deep trees that could memorize the training data instead of learning the patterns.
-    \item Min\_samples\_leaf = 1 percent of training sample size: This prevents the tree from creating trees that are too small or specific, limiting overfitting
+    \item Min\_samples\_leaf = 1 \% of training sample size: This prevents the tree from creating trees that are too small or specific, limiting overfitting
 \end{itemize}
 To illustrate the instability of single trees, we trained two trees on different samples of the training data. However, the same test set was used to evaluate the performance of each tree. Since diabetes status is a binary outcome, the model was evaluated using classification-based metrics rather than regressors like R2. Overall this approach to use multiple trees demonstrates that fundamentally decision tree models have high variance. Therefore for each tree we evaluated:
 \begin{itemize}
@@ -204,13 +197,47 @@ To illustrate the instability of single trees, we trained two trees on different
     \centering
     \begin{tabular}{cccl}\toprule
          Model& Accuracy& True Positive Rate & True Negative Rate\\\midrule
-         Decision Tree 1&  0.784&  0.932&0.320\\
-         Decision Tree 2&  0.782&  0.928&0.322\\ \bottomrule
+         Tree 1&  0.784&  0.932&0.320\\
+         Tree 2&  0.782&  0.928&0.322\\ \bottomrule
     \end{tabular}
-    \caption{Performance of Single Decision Trees on the 20 Percent Test Set}
+    \caption{Performance of Single Decision Trees on the 20 \% Test Set}
+    \label{tab:placeholder}
+\end{table}
+Table 1 summarizes the results for the two models. Both trees achieved similar accuracy (~78\%) and high true positive rates (93.2\% and 92.8\%), indicating consistency and strong performance in identifying diabetic patients. This overall shows that our model is finding reliable patterns that separate people with diabetes to those without diabetes. However, the true negative rates differed significantly between the two trees (0.320 vs 0.322), with 0.6\% relative decrease instability in classifying non-diabetic patients was indicated. A slight limitation in the model is revealed that both trees appear heavily biased towards predicting diabetes. 
+These conclusions are further justified by the values found in each tree's confusion matrix. To create the confusion matrix, the model’s predictions were compared to the actual diabetes status for each respondent in the 20\% test set. However, the differences in matrix values in Table 2 are extremely small showing that the two individual trees have stability and consistency.  Tree 1 is slightly more sensitive as it identifies 21 more diabetic cases than tree 2. Additionally overall tree 2 is less accurate. 
+
+\begin{table}
+    \centering
+    \begin{tabular}{cccl}\toprule
+         Metric& Tree 1& Tree 2& Change\\\midrule
+         True Positive&  4612&  4591& -21\\
+         False Negative&  335&  356& +21\\
+         False Positive&  1071&  1068& -3\\
+         True Negative&  504&  507 & +3\\ \bottomrule
+    \end{tabular}
+    \caption{Comparison of Confusion Matrices of the Individual Trees}
     \label{tab:placeholder}
 \end{table}
 
+Lastly, it is time to dive into the actual decision tree models analysis. It can be determined from looking at the trees in Figures 4 and 5 that they are relatively deep with many lower-level splits. These splits are helpful in capturing the noise in the training data as single trees are high-variance models that are prone to overfitting. The visual patterns within these diagrams are significant. The trees are dominated by orange nodes; this explains why there are high True Positive Rates for both trees, because the orange nodes represent predictors of diabetes, while the blue nodes represent predictions of no diabetes. 
+
+The consistency and stability of the two trees is evident in the similarities of their structure. These similarities are significantly clear in the upper levels of the tree. Another visual factor that appears in this model is the node coloring. The lighter node colors indicate that the node has a mix of both diabetic and non-diabetic people, a more uncertain prediction. This differs from the darker nodes which contain confident predictions in favor or against diabetes risk. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-10 at 4.44.54 PM.png}
+    \caption{Sample Decision Tree 1}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-10 at 4.45.44 PM.png}
+    \caption{Sample Decision Tree 2}
+    \label{fig:placeholder}
+\end{figure}
+
+Through this model creation there were also some limitations that we came across. As discussed during analysis of Tables 1 and 2 there was an extreme imbalance in the risk determination of diabetes. Although there was almost never a missed case of diabetes this could create false alarms. Finally, there is a potential overfitting in this data model as the structures are complex leading to the assumption that the model didn’t just learn from true patterns but possible noise.
 
 \subsection{Determining Max Depth Value}
 
@@ -352,151 +379,8 @@ with a horizontal rule of 0.8~inches.\footnote{Multiple footnotes can
 appear in each column, in the same order as they appear in the text,
 but spread them across columns and pages if possible.}
 
-\begin{figure}[ht]
-\vskip 0.2in
-\begin{center}
-\centerline{\includegraphics[width=\columnwidth]{icml_numpapers}}
-\caption{Historical locations and number of accepted papers for International
-Machine Learning Conferences (ICML 1993 -- ICML 2008) and International
-Workshops on Machine Learning (ML 1988 -- ML 1992). At the time this figure was
-produced, the number of accepted papers for ICML 2008 was unknown and instead
-estimated.}
-\label{icml-historical}
-\end{center}
-\vskip -0.2in
-\end{figure}
 
-\subsection{Figures}
 
-You may want to include figures in the paper to illustrate
-your approach and results. Such artwork should be centered,
-legible, and separated from the text. Lines should be dark and at
-least 0.5~points thick for purposes of reproduction, and text should
-not appear on a gray background.
-
-Label all distinct components of each figure. If the figure takes the
-form of a graph, then give a name for each axis and include a legend
-that briefly describes each curve. Do not include a title inside the
-figure; instead, the caption should serve this function.
-
-Number figures sequentially, placing the figure number and caption
-\emph{after} the graphics, with at least 0.1~inches of space before
-the caption and 0.1~inches after it, as in
-\cref{icml-historical}. The figure caption should be set in
-9~point type and centered unless it runs two or more lines, in which
-case it should be flush left. You may float figures to the top or
-bottom of a column, and you may set wide figures across both columns
-(use the environment \texttt{figure*} in \LaTeX). Always place
-two-column figures at the top or bottom of the page.
-
-\subsection{Algorithms}
-
-If you are using \LaTeX, please use the ``algorithm'' and ``algorithmic''
-environments to format pseudocode. These require
-the corresponding stylefiles, algorithm.sty and
-algorithmic.sty, which are supplied with this package.
-\cref{alg:example} shows an example.
-
-\begin{algorithm}[tb]
-   \caption{Bubble Sort}
-   \label{alg:example}
-\begin{algorithmic}
-   \STATE {\bfseries Input:} data $x_i$, size $m$
-   \REPEAT
-   \STATE Initialize $noChange = true$.
-   \FOR{$i=1$ {\bfseries to} $m-1$}
-   \IF{$x_i > x_{i+1}$}
-   \STATE Swap $x_i$ and $x_{i+1}$
-   \STATE $noChange = false$
-   \ENDIF
-   \ENDFOR
-   \UNTIL{$noChange$ is $true$}
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Tables}
-
-You may also want to include tables that summarize material. Like
-figures, these should be centered, legible, and numbered consecutively.
-However, place the title \emph{above} the table with at least
-0.1~inches of space before the title and the same after it, as in
-\cref{sample-table}. The table title should be set in 9~point
-type and centered unless it runs two or more lines, in which case it
-should be flush left.
-
-% Note use of \abovespace and \belowspace to get reasonable spacing
-% above and below tabular lines.
-
-\begin{table}[t]
-\caption{Classification accuracies for naive Bayes and flexible
-Bayes on various data sets.}
-\label{sample-table}
-\vskip 0.15in
-\begin{center}
-\begin{small}
-\begin{sc}
-\begin{tabular}{lcccr}
-\toprule
-Data set & Naive & Flexible & Better? \\
-\midrule
-Breast    & 95.9$\pm$ 0.2& 96.7$\pm$ 0.2& $\surd$ \\
-Cleveland & 83.3$\pm$ 0.6& 80.0$\pm$ 0.6& $\times$\\
-Glass2    & 61.9$\pm$ 1.4& 83.8$\pm$ 0.7& $\surd$ \\
-Credit    & 74.8$\pm$ 0.5& 78.3$\pm$ 0.6&         \\
-Horse     & 73.3$\pm$ 0.9& 69.7$\pm$ 1.0& $\times$\\
-Meta      & 67.1$\pm$ 0.6& 76.5$\pm$ 0.5& $\surd$ \\
-Pima      & 75.1$\pm$ 0.6& 73.9$\pm$ 0.5&         \\
-Vehicle   & 44.9$\pm$ 0.6& 61.5$\pm$ 0.4& $\surd$ \\
-\bottomrule
-\end{tabular}
-\end{sc}
-\end{small}
-\end{center}
-\vskip -0.1in
-\end{table}
-
-Tables contain textual material, whereas figures contain graphical material.
-Specify the contents of each row and column in the table's topmost
-row. Again, you may float tables to a column's top or bottom, and set
-wide tables across both columns. Place two-column tables at the
-top or bottom of the page.
-
-\subsection{Theorems and such}
-The preferred way is to number definitions, propositions, lemmas, etc. consecutively, within sections, as shown below.
-\begin{definition}
-\label{def:inj}
-A function $f:X \to Y$ is injective if for any $x,y\in X$ different, $f(x)\ne f(y)$.
-\end{definition}
-Using \cref{def:inj} we immediate get the following result:
-\begin{proposition}
-If $f$ is injective mapping a set $X$ to another set $Y$, 
-the cardinality of $Y$ is at least as large as that of $X$
-\end{proposition}
-\begin{proof} 
-Left as an exercise to the reader. 
-\end{proof}
-\cref{lem:usefullemma} stated next will prove to be useful.
-\begin{lemma}
-\label{lem:usefullemma}
-For any $f:X \to Y$ and $g:Y\to Z$ injective functions, $f \circ g$ is injective.
-\end{lemma}
-\begin{theorem}
-\label{thm:bigtheorem}
-If $f:X\to Y$ is bijective, the cardinality of $X$ and $Y$ are the same.
-\end{theorem}
-An easy corollary of \cref{thm:bigtheorem} is the following:
-\begin{corollary}
-If $f:X\to Y$ is bijective, 
-the cardinality of $X$ is at least as large as that of $Y$.
-\end{corollary}
-\begin{assumption}
-The set $X$ is finite.
-\label{ass:xfinite}
-\end{assumption}
-\begin{remark}
-According to some, it is only the finite case (cf. \cref{ass:xfinite}) that is interesting.
-\end{remark}
-%restatable
 
 
 
