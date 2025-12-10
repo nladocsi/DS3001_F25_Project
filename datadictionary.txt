@@ -1,15 +1,15 @@
-xvGESDIB_A: Ever had gestational diabetes
-PREDIB_A: Ever had prediabetes
-DIBEV_A: Ever had diabetes
-DIB_ANY: Ever had diabetes, prediabetes, or gestational diabetes with 1 denoting a participant coded as had. 
-DIBAGETC_A:  
-SEX_A: Sex of sample adult with 1 denoting a participant coded as male
-RACELLP_A:
-REGION:
-RATCAT_A:
-EDUCP_A:
-PHSTAT_A:
-WLKLEIS_A:
-BMICAT_A:
-HYPEV_A: 
-CHLEV_A: 
+GESDIB_A: Ever had gestational diabetes with 1 denoting yes and 2 no
+PREDIB_A: Ever had prediabetes with 1 denoting yes and 2 no
+DIBEV_A: Ever had diabetes with 1 denoting yes and 2 no
+DIB_ANY: Ever had diabetes, prediabetes, or gestational diabetes, with 1 denoting that a participant had 
+DIBAGETC_A: Age first diagnosed with diabetes
+SEX_A: Sex of sample adult, with 1 denoting a participant coded as male and 2 a participant as female
+RACALLP_A: Race of participant
+REGION: Region participant's household is located in
+RATCAT_A:Ratio of family income to poverty threshold for patient
+EDUCP_A: Educational level of patient
+PHSTAT_A: General health status
+WLKLEIS_A: If the patient walked for leisure in the past 7 days with 1 denoting yes and 2 no
+BMICAT_A: Categorical body mass index of patient
+HYPEV_A: Eer been told they have hypertension with 1 denoting yes and 2 no
+CHLEV_A: Ever had high cholesterol with 1 denoting yes and 2 no
