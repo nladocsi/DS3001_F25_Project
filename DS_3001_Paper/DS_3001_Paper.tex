@@ -154,14 +154,14 @@ The simple count plot in Figure 1 shows that the majority of respondents do not 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.11.41 PM2.png}
+    \includegraphics[width=0.8\linewidth]{Screenshot 2025-12-08 at 9.11.41 PM2.png}
     \caption{Diabetes Prevalence in the Data}
     \label{fig:placeholder}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.22.07 PM.png}
+    \includegraphics[width=0.8\linewidth]{Screenshot 2025-12-08 at 9.22.07 PM.png}
     \caption{Diabetes Prevalence by Sex}
     \label{fig:placeholder}
 \end{figure}
@@ -170,7 +170,7 @@ To investigate variables with continuous value ranges, we examined correlations 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-08 at 9.24.14 PM.png}
+    \includegraphics[width=0.8\linewidth]{Screenshot 2025-12-08 at 9.24.14 PM.png}
     \caption{Correlation Heatmap of Key Predictors}
     \label{fig:placeholder}
 \end{figure}
@@ -225,14 +225,14 @@ The consistency and stability of the two trees is evident in the similarities of
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-10 at 4.44.54 PM.png}
+    \includegraphics[width=0.9\linewidth]{Screenshot 2025-12-10 at 4.44.54 PM.png}
     \caption{Sample Decision Tree 1}
     \label{fig:placeholder}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Screenshot 2025-12-10 at 4.45.44 PM.png}
+    \includegraphics[width=0.9\linewidth]{Screenshot 2025-12-10 at 4.45.44 PM.png}
     \caption{Sample Decision Tree 2}
     \label{fig:placeholder}
 \end{figure}
@@ -240,122 +240,55 @@ The consistency and stability of the two trees is evident in the similarities of
 Through this model creation there were also some limitations that we came across. As discussed during analysis of Tables 1 and 2 there was an extreme imbalance in the risk determination of diabetes. Although there was almost never a missed case of diabetes this could create false alarms. Finally, there is a potential overfitting in this data model as the structures are complex leading to the assumption that the model didn’t just learn from true patterns but possible noise.
 
 \subsection{Determining Max Depth Value}
+In order to validate the choice of tree depth, a test was conducted using the values depth\_values = [5, 10, 15, 20]. Trees with the small depth value of 5, had the lowest test-set accuracy value of 0.784729 which indicates underfitting. Trees with a depth greater than 10 had the same accuracy value as that with a depth of 10 which was 0.786415. Since predictive performance did not improve after a depth of 10, it can be concluded that increasing depth beyond 10 does not improve the model. Therefore a max\_depth of 10 was used in our subsequent models. Table 2 shows the accuracy values for each depth value. It is important to note that there is a very small performance difference between the max\_depth 5 and the rest. Although the depth=10 performs best this small difference indicates that random variation could be the cause, not just true model improvement. 
+\begin{table}
+    \centering
+    \begin{tabular}{cccl}\toprule
+         Max\_depth& Accuracy\\\midrule
+         5&  0.784729\\
+         10&  0.786415\\ 
+         15&  0.786415\\ 
+         20&  0.786415\\\bottomrule
+    \end{tabular}
+    \caption{Accuracy Values for Varying Maximum Depth Values}
+    \label{tab:placeholder}
+\end{table}
 
 \subsection{Bootstrap Aggregation}
+To address the instability of single trees, we implemented bootstrap aggregation. This method will construct multiple trees and then average their predictions to reduce overall variance. We constructed an ensemble of T = 1000 decision trees with an upper limit of max\_depth = 10. This is a reduced complexity from the single tree models which had a max\_depth = 15. Each tree in the ensemble was trained on a bootstrap sample of the training data, and predictions of the test set were averaged across trees.
+Figure 6 shows a kernel density plot of the distribution of test-set accuracy values across the 1,000 trees that were bootstrapped. The aggregate predicted score across all 1,000 trees or ensemble accuracy has a value 0.788562 and 2.5\% and 97.5\% accuracy quantiles: [0.77736891 0.78702852]. This distribution shows that the ensemble prediction is closer to the upper end of the variability range which is consistent with the theory. 
+Compared to the single decision trees the accuracy slightly improved from 0.786 to 0.789. This aligns with the theory that averaging high-variance models reduces variance and improves predictive performance. Stability also greatly increased by taking the average, as the model is no longer relying solely on a particular split chosen by one tree. Overall, bootstrapping improved both predictive accuracy and reliability even though the accuracy value increased only slightly.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Screenshot 2025-12-10 at 6.53.48 PM.png}
+    \caption{ Distribution of Test-Set Accuracy Values Across 1,000 Bagged Trees}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Random Forest and Feature Importance}
+To further investigate which predictors drive diabetes risk, we also fit a RandomForestClassifier with max\_depth = 10 on the training set. From our previous model testing we were able to build predictive models towards diabetes risk. We now need to finalize the answer to our initial question and determine the demographic and health characteristics that increase the risk of diabetes. The feature importance allows us to validate our selection of variables and understand the prediction drivers. We computed the accuracy and mean decrease in impurity (MDI) for each feature to visualize these values in the horizontal bar plot in Figure 7.  The accuracy calculated was 0.788 which is similar to that of the bootstrapped ensemble. Figure 7 revealed that:
+\begin{itemize}
+    \item High-cholesterol (CHLEV\_A) and age (AGEP\_A) are the most influential non-diagnostic predictors of diabetes.
+    \item Variables relating to general health measurements and physical activity contributed moderately to predictions.
+    \item Sex and food insecurity had the least impact on prediction making but still had some influence which they can not be discounted for.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{Screenshot 2025-12-10 at 7.00.25 PM.png}
+    \caption{Feature Importance Based of MDI Calculations}
+    \label{fig:placeholder}
+\end{figure}
 
 \subsection{Summary of Findings}
+In comparing the models above several patterns, which are consistent with literature knowledge from class emerge. The single decision tree classifiers showed high sensitivity but more variability. From the true positive and true negative calculated values it was determined that individual trees are better at identifying diabetic rather than non-diabetic patients. Analysis of multiple max\_depth values revealed that the optimal tree depth that provides a balance between under and overfitting was 10. Using bootstrapping significantly improved predictive stability and slightly increased accuracy compared to that of single trees. The RandomForestClassifier further confirmed these assumptions while identifying high-cholesterol and age as the dominant predictors of diabetes. 
+
+Confidence in these results is moderate with respect to identifying the most important risk factors, but lower for making individual-level predictions. Increased confidence in the model comes from the knowledge that all three models (single tree, bootstrap, and random forest) produced consistent conclusions regarding high-cholesterol and age. Also, in determining optimal tree depth, it could be seen that the model performance is stable across a range of tree depths. Lastly, bootstrapping reduced variance and further improved accuracy. Overall, the results support high confidence in qualitative conclusions, such as determining risk factors, but lower confidence in quantitative predictions such as determining diabetic outcome. The models are best used for risk-factor identification rather than precise diagnostics.
 
 \section{Conclusion}
 
 
-
-
-ICML uses double-blind review, so author information must not appear. If
-you are using \LaTeX\/ and the \texttt{icml2025.sty} file, use
-\verb+\icmlauthor{...}+ to specify authors and \verb+\icmlaffiliation{...}+ to specify affiliations. (Read the TeX code used to produce this document for an example usage.) The author information
-will not be printed unless \texttt{accepted} is passed as an argument to the
-style file.
-Submissions that include the author information will not
-be reviewed.
-
-\subsubsection{Self-Citations}
-
-If you are citing published papers for which you are an author, refer
-to yourself in the third person. In particular, do not use phrases
-that reveal your identity (e.g., ``in previous work \cite{langley00}, we
-have shown \ldots'').
-
-Do not anonymize citations in the reference section. The only exception are manuscripts that are
-not yet published (e.g., under submission). If you choose to refer to
-such unpublished manuscripts \cite{anonymous}, anonymized copies have
-to be submitted
-as Supplementary Material via OpenReview\@. However, keep in mind that an ICML
-paper should be self contained and should contain sufficient detail
-for the reviewers to evaluate the work. In particular, reviewers are
-not required to look at the Supplementary Material when writing their
-review (they are not required to look at more than the first $8$ pages of the submitted document).
-
-\subsubsection{Camera-Ready Author Information}
-\label{final author}
-
-If a paper is accepted, a final camera-ready copy must be prepared.
-%
-For camera-ready papers, author information should start 0.3~inches below the
-bottom rule surrounding the title. The authors' names should appear in 10~point
-bold type, in a row, separated by white space, and centered. Author names should
-not be broken across lines. Unbolded superscripted numbers, starting 1, should
-be used to refer to affiliations.
-
-Affiliations should be numbered in the order of appearance. A single footnote
-block of text should be used to list all the affiliations. (Academic
-affiliations should list Department, University, City, State/Region, Country.
-Similarly for industrial affiliations.)
-
-Each distinct affiliations should be listed once. If an author has multiple
-affiliations, multiple superscripts should be placed after the name, separated
-by thin spaces. If the authors would like to highlight equal contribution by
-multiple first authors, those authors should have an asterisk placed after their
-name in superscript, and the term ``\textsuperscript{*}Equal contribution"
-should be placed in the footnote block ahead of the list of affiliations. A
-list of corresponding authors and their emails (in the format Full Name
-\textless{}email@domain.com\textgreater{}) can follow the list of affiliations.
-Ideally only one or two names should be listed.
-
-A sample file with author names is included in the ICML2025 style file
-package. Turn on the \texttt{[accepted]} option to the stylefile to
-see the names rendered. All of the guidelines above are implemented
-by the \LaTeX\ style file.
-
-\subsection{Abstract}
-
-The paper abstract should begin in the left column, 0.4~inches below the final
-address. The heading `Abstract' should be centered, bold, and in 11~point type.
-The abstract body should use 10~point type, with a vertical spacing of
-11~points, and should be indented 0.25~inches more than normal on left-hand and
-right-hand margins. Insert 0.4~inches of blank space after the body. Keep your
-abstract brief and self-contained, limiting it to one paragraph and roughly 4--6
-sentences. Gross violations will require correction at the camera-ready phase.
-
-\subsection{Partitioning the Text}
-
-You should organize your paper into sections and paragraphs to help
-readers place a structure on the material and understand its
-contributions.
-
-\subsubsection{Sections and Subsections}
-
-Section headings should be numbered, flush left, and set in 11~pt bold
-type with the content words capitalized. Leave 0.25~inches of space
-before the heading and 0.15~inches after the heading.
-
-Similarly, subsection headings should be numbered, flush left, and set
-in 10~pt bold type with the content words capitalized. Leave
-0.2~inches of space before the heading and 0.13~inches afterward.
-
-Finally, subsubsection headings should be numbered, flush left, and
-set in 10~pt small caps with the content words capitalized. Leave
-0.18~inches of space before the heading and 0.1~inches after the
-heading.
-
-Please use no more than three levels of headings.
-
-\subsubsection{Paragraphs and Footnotes}
-
-Within each section or subsection, you should further partition the
-paper into paragraphs. Do not indent the first line of a given
-paragraph, but insert a blank line between succeeding ones.
-
-You can use footnotes\footnote{Footnotes
-should be complete sentences.} to provide readers with additional
-information about a topic without interrupting the flow of the paper.
-Indicate footnotes with a number in the text where the point is most
-relevant. Place the footnote in 9~point type at the bottom of the
-column in which it appears. Precede the first footnote in a column
-with a horizontal rule of 0.8~inches.\footnote{Multiple footnotes can
-appear in each column, in the same order as they appear in the text,
-but spread them across columns and pages if possible.}
 
 
 
